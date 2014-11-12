@@ -1,9 +1,9 @@
 #!/bin/bash
 
-This script is developed by Kevin Allioli
-Script Name: setup-debian.sh Version 1.0
-Website: http://www.openology.net
-Thank you for your interest in Simple install OpenVPN
+# This script is developed by Kevin Allioli
+# Script Name: setup-debian.sh Version 1.0
+# Website: http://www.openology.net
+# Thank you for your interest in Simple install OpenVPN
 
 # Test que le script est lance en root
 if [ $EUID -ne 0 ]; then
@@ -20,7 +20,7 @@ APT_GET="aptitude install"
 PACKAGE_LIST="openvpn zip"
 
 ## Full System Update
-$SU aptitude dist-upgrade -y
+$SU aptitude upgrade -y
 
 ## Package Installation and configuration
 $SU $APT_GET $PACKAGE_LIST -y
@@ -95,13 +95,13 @@ echo "Insert IP of the second DNS Server (Example : 8.8.4.4)"
 read network_dns2
 
 $SU cat <<EOF>/etc/openvpn/server.conf
-# Serveur TCP/443
+# Server $protocol/$server_port
 mode server
 proto $protocol
 port $server_port
 dev tun
 
-# Cles et certificats
+# Keys et certificates
 ca ca.crt
 cert server.crt
 key server.key
@@ -109,7 +109,7 @@ dh dh1024.pem
 tls-auth ta.key 0
 cipher AES-256-CBC
 
-# Reseau
+# Network
 server $network_ip $network_mask
 push "redirect-gateway def1 bypass-dhcp"
 push "dhcp-option DNS $network_dns1"
@@ -137,10 +137,11 @@ $SU /etc/init.d/openvpn start
 
 $SU sed -i '/#net.ipv4.ip_forward=1/d' /etc/sysctl.conf
 $SU echo "net.ipv4.ip_foward=1">>/etc/sysctl.conf
+$SU sysctl -p
 
-cd /etc/openvpn/script
 ## Add scripts for user management
 
+cd /etc/openvpn/script
 if [ ! -f /usr/bin/adduserovpn ]
 then
         wget http://download.openology.net/project/siovpn/adduserovpn.sh
