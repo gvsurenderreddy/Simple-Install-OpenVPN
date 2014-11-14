@@ -17,7 +17,7 @@ apt-get install aptitude sudo -y
 
 SU="sudo"
 APT_GET="aptitude install"
-PACKAGE_LIST="openvpn zip"
+PACKAGE_LIST="openvpn zip easy-rsa perl"
 
 ## Full System Update
 $SU aptitude upgrade -y
@@ -25,7 +25,7 @@ $SU aptitude upgrade -y
 ## Package Installation and configuration
 $SU $APT_GET $PACKAGE_LIST -y
 $SU mkdir /etc/openvpn/easy-rsa/
-$SU cp -r /usr/share/doc/openvpn/examples/easy-rsa/2.0/* /etc/openvpn/easy-rsa/
+$SU cp -r /usr/share/easy-rsa/* /etc/openvpn/easy-rsa/
 $SU chown -R $USER /etc/openvpn/easy-rsa/
 
 ## Set Variable for CA
@@ -66,6 +66,7 @@ $SU echo "export PKCS11_PIN=1234">>/etc/openvpn/easy-rsa/vars
 
 ## Key generation and export
 $SU ln -s /etc/openvpn/easy-rsa/openssl-1.0.0.cnf /etc/openvpn/easy-rsa/openssl.cnf
+$SU perl -p -i -e 's|^(subjectAltName=)|#$1|;' /etc/openvpn/easy-rsa/openssl-1.0.0.cnf
 cd /etc/openvpn/easy-rsa/
 source vars
 ./clean-all
@@ -73,7 +74,7 @@ source vars
 ./pkitool --initca
 ./pkitool --server server
 $SU openvpn --genkey --secret keys/ta.key    
-$SU cp keys/ca.crt keys/ta.key keys/server.crt keys/server.key keys/dh1024.pem /etc/openvpn/
+$SU cp keys/ca.crt keys/ta.key keys/server.crt keys/server.key keys/dh2048.pem /etc/openvpn/
 
 ## Administrative folder creation
 $SU mkdir /etc/openvpn/jail
@@ -135,9 +136,8 @@ $SU /etc/init.d/openvpn start
 
 ## Post Install Setting
 
-$SU sed -i '/#net.ipv4.ip_forward=1/d' /etc/sysctl.conf
-$SU echo "net.ipv4.ip_foward=1">>/etc/sysctl.conf
-$SU sysctl -p
+$SU echo "net.ipv4.ip_forward=1">>/etc/sysctl.d/10-ip_forward.conf
+$SU sysctl -p /etc/sysctl.d/10-ip_forward.conf
 
 ## Add scripts for user management
 
