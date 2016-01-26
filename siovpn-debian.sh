@@ -106,7 +106,7 @@ dev tun
 ca ca.crt
 cert server.crt
 key server.key
-dh dh1024.pem
+dh dh2048.pem
 tls-auth ta.key 0
 cipher AES-256-CBC
 
