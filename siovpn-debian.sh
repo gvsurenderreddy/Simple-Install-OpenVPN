@@ -144,7 +144,7 @@ $SU sysctl -p /etc/sysctl.d/10-ip_forward.conf
 cd /etc/openvpn/script
 if [ ! -f /usr/bin/adduserovpn ]
 then
-        wget http://download.openology.net/project/siovpn/adduserovpn.sh
+        wget https://raw.githubusercontent.com/kallioli/Simple-Install-OpenVPN/master/adduserovpn.sh
 fi
  
 chmod +x /etc/openvpn/script/adduserovpn.sh
@@ -152,7 +152,7 @@ ln -s /etc/openvpn/script/adduserovpn.sh /usr/bin/adduserovpn
 
 if [ ! -f /usr/bin/deluserovpn ]
 then
-        wget http://download.openology.net/project/siovpn/deluserovpn.sh
+        wget https://raw.githubusercontent.com/kallioli/Simple-Install-OpenVPN/master/deluserovpn.sh
 fi
 
 chmod +x /etc/openvpn/script/deluserovpn.sh
