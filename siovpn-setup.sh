@@ -5,7 +5,7 @@
 ## Website: http://www.it4it.fr
 ## Thank you for your interest in Simple install OpenVPN
 
-reset
+clear
 echo "#####################################";
 echo "#       Simple Install OpenVPN      #";
 echo "#          By Kevin Allioli         #";
@@ -14,8 +14,8 @@ echo "#####################################";
 echo "";
 echo "What is the distribution used ?";
 echo "";
-echo "1) For distribution based on Debian (Debian, Ubuntu...";
-echo "2) For distribution based on RHEL (CentOS, Fedora...";
+echo "1) For distribution based on Debian (Debian, Ubuntu...)";
+echo "2) For distribution based on RHEL (CentOS, Fedora...)";
 read answer
 if [ $answer = "1" ] || [ $answer = "DEBIAN" ]
 then
