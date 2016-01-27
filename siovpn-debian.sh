@@ -77,7 +77,7 @@ $SU openvpn --genkey --secret keys/ta.key
 $SU cp keys/ca.crt keys/ta.key keys/server.crt keys/server.key keys/dh2048.pem /etc/openvpn/
 
 ## Administrative folder creation
-$SU mkdir /etc/openvpn/jail
+$SU mkdir -p /etc/openvpn/jail/tmp
 $SU mkdir /etc/openvpn/clientconf
 $SU mkdir /etc/openvpn/script
 
