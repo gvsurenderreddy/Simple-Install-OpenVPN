@@ -136,7 +136,7 @@ displayandexec "Repository update" aptitude update
 displayandexec "Install prerequisite" $CMD_APT $PACKAGES_LIST
 displayandexec "CA Initialisation" mkdir /etc/openvpn/easy-rsa/
 cp -r /usr/share/easy-rsa/* /etc/openvpn/easy-rsa/
-
+rm /etc/openvpn/easy-rsa/vars
 displayandexec "Generate vars file" cat <<EOF>/etc/openvpn/easy-rsa/vars
 export OPENSSL="openssl"
 export PKCS11TOOL="pkcs11-tool"
