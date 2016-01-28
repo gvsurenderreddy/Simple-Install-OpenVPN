@@ -136,17 +136,40 @@ displayandexec "Repository update" aptitude update
 displayandexec "Install prerequisite" $CMD_APT $PACKAGES_LIST
 displayandexec "CA Initialisation" mkdir /etc/openvpn/easy-rsa/
 cp -r /usr/share/easy-rsa/* /etc/openvpn/easy-rsa/
+
+displayandexec "Generate vars file" cat <<EOF>/etc/openvpn/easy-rsa/vars
+export OPENSSL="openssl"
+export PKCS11TOOL="pkcs11-tool"
+export GREP="grep"
+export KEY_CONFIG=`$EASY_RSA/whichopensslcnf $EASY_RSA`
+export KEY_DIR="$EASY_RSA/keys"
+echo NOTE: If you run ./clean-all, I will be doing a rm -rf on $KEY_DIR
+export PKCS11_MODULE_PATH=changeme
+export PKCS11_PIN=1234
+export KEY_SIZE=2048
+export CA_EXPIRE=3650
+export KEY_EXPIRE=3650
+export KEY_COUNTRY="$key_country"
+export KEY_PROVINCE="$key_province"
+export KEY_CITY="$key_city"
+export KEY_ORG="$key_org"
+export KEY_EMAIL="key_email"
+export KEY_OU="MyOrganizationalUnit"
+export KEY_NAME="EasyRSA"
+export KEY_CN="$(hostname --fqdn)"
+EOF
 chown -R $USER /etc/openvpn/easy-rsa/
-displayandexec "Modifying country  value" sed -i -e "s/^export KEY_COUNTRY=/export KEY_COUNTRY=\"$key_country\"/g" /etc/openvpn/easy-rsa/vars
-displayandexec "Modifying province value" sed -i -e "s/^export KEY_PROVINCE=/export KEY_PROVINCE=\"$key_province\"/g" /etc/openvpn/easy-rsa/vars
-displayandexec "Modifying city value" sed -i -e "s/^export KEY_CITY=/export KEY_CITY=\"$key_city\"/g" /etc/openvpn/easy-rsa/vars
-displayandexec "Modifying organisation value" sed -i -e "s/^export KEY_ORG=/export KEY_ORG=\"$key_org\"/g" /etc/openvpn/easy-rsa/vars
-displayandexec "Modifying e-mail value" sed -i -e "s/^export KEY_EMAIL=/export KEY_EMAIL=\"$key_email\"/g" /etc/openvpn/easy-rsa/vars
-displayandexec "Modifying common name value" sed -i -e "s/^export KEY_CN=/export KEY_CN=\"$(hostname --fqdn)\"/g" /etc/openvpn/easy-rsa/vars
-sed -i -e "s/^export KEY_NAME=/export KEY_NAME=changeme/g" /etc/openvpn/easy-rsa/vars
-sed -i -e "s/^export KEY_OU=/export KEY_OU=changeme/g" /etc/openvpn/easy-rsa/vars
-sed -i -e "s/^export PKCS11_MODULE_PATH=/export PKCS11_MODULE_PATH=changeme/g" /etc/openvpn/easy-rsa/vars
-sed -i -e "s/^export PKCS11_PIN=/export PKCS11_PIN=1234/g" /etc/openvpn/easy-rsa/vars
+
+#displayandexec "Modifying country  value" sed -i -e "s/^export KEY_COUNTRY=/export KEY_COUNTRY=\"$key_country\"/g" /etc/openvpn/easy-rsa/vars
+#displayandexec "Modifying province value" sed -i -e "s/^export KEY_PROVINCE=/export KEY_PROVINCE=\"$key_province\"/g" /etc/openvpn/easy-rsa/vars
+#displayandexec "Modifying city value" sed -i -e "s/^export KEY_CITY=/export KEY_CITY=\"$key_city\"/g" /etc/openvpn/easy-rsa/vars
+#displayandexec "Modifying organisation value" sed -i -e "s/^export KEY_ORG=/export KEY_ORG=\"$key_org\"/g" /etc/openvpn/easy-rsa/vars
+#displayandexec "Modifying e-mail value" sed -i -e "s/^export KEY_EMAIL=/export KEY_EMAIL=\"$key_email\"/g" /etc/openvpn/easy-rsa/vars
+#displayandexec "Modifying common name value" sed -i -e "s/^export KEY_CN=/export KEY_CN=\"$(hostname --fqdn)\"/g" /etc/openvpn/easy-rsa/vars
+#sed -i -e "s/^export KEY_NAME=/export KEY_NAME=changeme/g" /etc/openvpn/easy-rsa/vars
+#sed -i -e "s/^export KEY_OU=/export KEY_OU=changeme/g" /etc/openvpn/easy-rsa/vars
+#sed -i -e "s/^export PKCS11_MODULE_PATH=/export PKCS11_MODULE_PATH=changeme/g" /etc/openvpn/easy-rsa/vars
+#sed -i -e "s/^export PKCS11_PIN=/export PKCS11_PIN=1234/g" /etc/openvpn/easy-rsa/vars
 
 displaytitle "-- Key generation and export"
 ln -s /etc/openvpn/easy-rsa/openssl-1.0.0.cnf /etc/openvpn/easy-rsa/openssl.cnf
